@@ -22,7 +22,6 @@ button,input{font:inherit}
 .header{height:52px;min-height:52px;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:19px;font-weight:700;z-index:10;padding-top:env(safe-area-inset-top)}
 .header .x{position:absolute;right:16px;color:#aaa;font-size:31px;font-weight:300;line-height:1;cursor:pointer}
 .header .back{position:absolute;left:16px;color:#fff;font-size:30px;font-weight:300;line-height:1;cursor:pointer}
-.fullscreen-btn{position:absolute;right:52px;top:8px;height:35px;border:1px solid #666;border-radius:8px;background:#333;color:#fff;font-size:11px;padding:0 9px;cursor:pointer}
 
 /* Profile setup */
 .form-wrap{height:calc(100dvh - 52px);overflow:auto;padding:16px;background:#fff;-webkit-overflow-scrolling:touch}
@@ -74,7 +73,7 @@ button,input{font:inherit}
 <div class="app" id="app"></div>
 <script>
 const KEY='messPassProfileV10';
-let profile=null, selectedMeal='Lunch', activeStream=null;
+let profile=null, selectedMeal='Lunch', activeStream=null, passTimer=null, passReturnTimer=null;
 const app=document.getElementById('app');
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function getProfile(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}}
@@ -102,12 +101,13 @@ function renderVideoPreview(src){document.getElementById('videoPreviewWrap').inn
 function field(id,label,val){return `<div class="field"><label>${label}</label><input id="${id}" type="text" value="${esc(val)}"></div>`}
 function v(id){return document.getElementById(id).value}
 function showCoupon(){
+ if(passTimer){clearInterval(passTimer);passTimer=null}
+ if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}
  profile=getProfile();if(!profile){showForm();return}
- app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Coupon<button class="fullscreen-btn" id="fs">FULLSCREEN</button><span class="x">×</span></div>
+ app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Coupon<span class="x">×</span></div>
  <div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}" alt="Profile"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div>
  <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><div class="rate">⭐ RATE US</div>
  <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div></div>`;
- document.getElementById('fs').onclick=enterFullscreen;
  document.querySelectorAll('.meal').forEach(b=>b.onclick=async()=>{selectedMeal=b.dataset.meal;await enterFullscreen();showScanner()});
  document.getElementById('profilePhotoAccess').ondblclick=showForm;
 }
@@ -127,16 +127,13 @@ async function showScanner(){
 }
 function stopCamera(){if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}}
 function makeQR(){const data=encodeURIComponent(`${profile.id}-${profile.name} - MESS PASS VERIFICATION SYSTEM ACCREDITED`);return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${data}&ecc=H&margin=10`}
-function showPass(){stopCamera();profile=getProfile();const now=new Date();const date=now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});const time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});app.innerHTML=`<div class="pass"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Pass<span class="x">×</span></div><div class="pass-card"><div class="pass-top"><div class="badge">27</div><div class="pass-grid"><div><div class="frame"><img src="${profile.photo}"></div><div class="pass-text">${esc(profile.id)}</div><div class="pass-sub">${esc(profile.name)}</div></div><div><div class="frame qr-frame"><img src="${makeQR()}" alt="QR"></div><div class="pass-text">${selectedMeal}</div><div class="pass-sub">${esc(profile.mess)}</div></div></div></div><div class="info"><div style="margin-bottom:5px">${esc(profile.program)}</div><div style="font-weight:700">Your Assigned Mess - ${esc(profile.mess)}</div></div><div class="date-row"><span>${date}</span><span>${time}</span></div><div class="approved">Meal Approved</div><div class="rate-pass"><div class="rate">⭐ RATE US</div></div><div class="video-strip" style="--accent:${profile.accent}"><div class="video-box">${profile.video?`<video src="${profile.video}" autoplay loop muted playsinline></video>`:`<div class="video-empty">No accepted badge video uploaded.<br>Double-click the profile photo on the coupon page to add one.</div>`}</div></div><div class="footer"><div><div class="gray">Father's Name</div><div class="value">${esc(profile.father)}</div></div><div><div class="gray">Mother's Name</div><div class="value">${esc(profile.mother)}</div></div><div><div class="gray">Program</div><div class="value">${esc(profile.program)}</div></div><div><div class="gray">Hostel</div><div class="value">${esc(profile.hostel)}</div></div></div></div></div>`}
+function showPass(){stopCamera();if(passTimer){clearInterval(passTimer);passTimer=null}if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}profile=getProfile();const now=new Date();const date=now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});const time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});app.innerHTML=`<div class="pass"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Pass<span class="x">×</span></div><div class="pass-card"><div class="pass-top"><div class="badge" id="passCountdown">30</div><div class="pass-grid"><div><div class="frame"><img src="${profile.photo}"></div><div class="pass-text">${esc(profile.id)}</div><div class="pass-sub">${esc(profile.name)}</div></div><div><div class="frame qr-frame"><img src="${makeQR()}" alt="QR"></div><div class="pass-text">${selectedMeal}</div><div class="pass-sub">${esc(profile.mess)}</div></div></div></div><div class="info"><div style="margin-bottom:5px">${esc(profile.program)}</div><div style="font-weight:700">Your Assigned Mess - ${esc(profile.mess)}</div></div><div class="date-row"><span>${date}</span><span>${time}</span></div><div class="approved">Meal Approved</div><div class="rate-pass"><div class="rate">⭐ RATE US</div></div><div class="video-strip" style="--accent:${profile.accent}"><div class="video-box">${profile.video?`<video src="${profile.video}" autoplay loop muted playsinline></video>`:`<div class="video-empty">No accepted badge video uploaded.<br>Double-click the profile photo on the coupon page to add one.</div>`}</div></div><div class="footer"><div><div class="gray">Father's Name</div><div class="value">${esc(profile.father)}</div></div><div><div class="gray">Mother's Name</div><div class="value">${esc(profile.mother)}</div></div><div><div class="gray">Program</div><div class="value">${esc(profile.program)}</div></div><div><div class="gray">Hostel</div><div class="value">${esc(profile.hostel)}</div></div></div></div></div>`;
+ let remaining=30;
+ passTimer=setInterval(()=>{remaining--;const badge=document.getElementById('passCountdown');if(!badge){clearInterval(passTimer);passTimer=null;return}badge.textContent=remaining;if(remaining<=0){clearInterval(passTimer);passTimer=null;passReturnTimer=setTimeout(showCoupon,500)}},1000)}
 profile=getProfile();if(profile)showCoupon();else showForm();
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 window.addEventListener('pagehide',stopCamera);
 
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
-    });
-}
 
 </script>
 </body></html>
