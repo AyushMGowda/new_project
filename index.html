@@ -4,28 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#262626">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
 <title>Mess Pass</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;padding:0;background:#111;font-family:Montserrat,Arial,sans-serif;color:#000}body{min-height:100vh}.app{width:100%;max-width:430px;min-height:100vh;margin:0 auto;background:#e8e8e8;overflow:hidden}.screen{min-height:100vh;background:#fff}.hidden{display:none!important}
-.header{height:62px;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:20px;font-weight:700;z-index:5}.header .x{position:absolute;right:18px;color:#999;font-size:34px;font-weight:300;line-height:1}.header .back{position:absolute;left:18px;color:#fff;font-size:32px;font-weight:300}
-.form-wrap{padding:18px;background:#fff}.notice{background:#eaf8ef;border:1px solid #a9dfbd;color:#126b3b;border-radius:9px;padding:12px 14px;margin-bottom:16px;font-size:14px;line-height:1.4}.photo-preview{width:188px;height:188px;margin:0 auto 18px;border-radius:14px;overflow:hidden;background:#eee;border:1px solid #bbb}.photo-preview img{width:100%;height:100%;object-fit:cover}.field{margin:0 0 15px}.field label{display:block;font-weight:700;font-size:15px;margin-bottom:7px}.field input,.field select{width:100%;height:54px;border:1px solid #aaa;border-radius:7px;background:#fff;color:#000!important;font-size:16px;padding:0 14px;outline:none}.field input::file-selector-button{background:#666;color:#fff;border:0;padding:10px 12px;margin-right:10px;border-radius:4px}.video-preview{width:100%;max-height:260px;background:#111;border-radius:8px;overflow:hidden;margin-top:8px}.video-preview video{display:block;width:100%;max-height:260px}.save{width:100%;height:58px;border:0;border-radius:7px;background:#198f5b;color:#fff;font-size:18px;font-weight:800;margin-top:5px;cursor:pointer}.small{font-size:12px;color:#777;margin-top:6px;line-height:1.4}
-.coupon{background:#fff;min-height:100vh}.coupon-card{margin:16px 28px 0;background:linear-gradient(105deg,#ff8075,#ffd477);border-radius:9px;padding:32px 36px 30px;box-shadow:0 4px 9px #999}.coupon-photo{width:216px;height:216px;border-radius:18px;overflow:hidden;margin:0 auto 12px;background:#ddd}.coupon-photo img{width:100%;height:100%;object-fit:cover}.nameid{text-align:center;font-size:25px;line-height:1.25;margin-bottom:36px}.detail{font-size:18px;line-height:1.35;margin:0 0 24px}.detail strong{display:block;margin-bottom:3px}.instruction{text-align:center;font-size:29px;line-height:1.25;padding:55px 28px 22px}.rate{text-align:center;margin:0 auto 28px;border:3px solid #7c1d2c;color:#111;background:#fff;border-radius:9px;padding:5px 18px;font-size:17px;font-weight:700;width:max-content}.meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;padding:0 36px 90px}.meal{height:122px;border:0;border-radius:9px;background:linear-gradient(105deg,#ff8075,#ffd477);box-shadow:0 7px 10px #888;font-size:25px;color:#000;font-weight:500;cursor:pointer}.meal span{margin-left:7px}.meal:nth-child(3){grid-column:1/2}
-.pass{background:#e7e7e7;min-height:100vh}.pass-card{background:#fff;margin:0 15px;border-radius:0 0 15px 15px;overflow:hidden}.pass-top{padding:68px 15px 18px;position:relative}.badge{position:absolute;right:12px;top:10px;width:31px;height:31px;border-radius:50%;background:#b3b3b3;display:flex;align-items:center;justify-content:center;font-weight:800}.pass-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;text-align:center}.frame{border:1px solid #000;padding:12px;background:#fff;box-shadow:0 6px 16px rgba(0,0,0,.5)}.frame img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.pass-text{font-weight:800;font-size:15px;margin-top:8px;line-height:1.4;text-shadow:1px 2px 4px rgba(0,0,0,.35)}.pass-sub{font-weight:700;font-size:14px;margin-top:2px;line-height:1.4}.qr-frame{padding:10px}.qr-frame img{background:#fff}.info{text-align:center;font-size:14px;line-height:1.6;padding:22px 15px 8px}.date-row{display:flex;justify-content:space-between;padding:5px 35px;font-size:18px;font-weight:800;margin:15px 0 18px}.approved{font-family:Arial,sans-serif;text-align:center;color:#62c354;font-size:28px;font-weight:800;margin:18px 0 14px;text-shadow:0 0 10px rgba(98,195,84,.4)}.rate-pass{text-align:center}.rate-pass .rate{margin-bottom:25px}
-.video-strip{background:var(--accent,#062506);padding:25px}.video-box{background:#fff;width:100%;aspect-ratio:1;overflow:hidden;display:flex;align-items:center;justify-content:center}.video-box video{width:100%;height:100%;object-fit:contain;background:#fff}.video-empty{color:#999;font-size:14px;text-align:center;padding:30px}.footer{padding:25px;background:#fff}.gray{color:#9a9a9a;font-size:14px;font-weight:600;margin-top:22px}.value{color:#000;font-size:15px;font-weight:600;margin-top:6px;line-height:1.4}
-.scanner{background:#000;min-height:100vh;color:#fff;position:relative;overflow:hidden}.scanner-camera{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,#151515,#000 65%)}.scan-line{position:absolute;left:14%;right:14%;top:50%;height:2px;background:#7d1b2c;box-shadow:0 0 9px #a22b42;animation:scan 1.2s ease-in-out infinite alternate}.dot{position:absolute;width:7px;height:7px;background:#d69c16;border-radius:50%;animation:float 2s infinite alternate ease-in-out}.d1{left:25%;top:42%}.d2{left:58%;top:38%}.d3{left:72%;top:54%}.d4{left:38%;top:63%}.d5{left:64%;top:67%}@keyframes scan{from{top:38%}to{top:62%}}@keyframes float{from{transform:translateY(-10px)}to{transform:translateY(14px)}}
-@media(max-width:430px){.coupon-card{margin-left:28px;margin-right:28px}.instruction{font-size:27px}.meal{font-size:22px}}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#111;font-family:Montserrat,Arial,sans-serif;color:#000;overflow:hidden}
+body{min-height:100dvh}
+button,input{font:inherit}
+.app{width:100%;max-width:430px;height:100dvh;min-height:100dvh;margin:0 auto;background:#fff;overflow:hidden}
+.screen,.coupon,.pass{width:100%;height:100dvh;min-height:100dvh;overflow:hidden;background:#fff}
+.hidden{display:none!important}
+.header{height:52px;min-height:52px;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:19px;font-weight:700;z-index:10;padding-top:env(safe-area-inset-top)}
+.header .x{position:absolute;right:16px;color:#aaa;font-size:31px;font-weight:300;line-height:1;cursor:pointer}
+.header .back{position:absolute;left:16px;color:#fff;font-size:30px;font-weight:300;line-height:1;cursor:pointer}
+.fullscreen-btn{position:absolute;right:52px;top:8px;height:35px;border:1px solid #666;border-radius:8px;background:#333;color:#fff;font-size:11px;padding:0 9px;cursor:pointer}
+
+/* Profile setup */
+.form-wrap{height:calc(100dvh - 52px);overflow:auto;padding:16px;background:#fff;-webkit-overflow-scrolling:touch}
+.notice{background:#eaf8ef;border:1px solid #a9dfbd;color:#126b3b;border-radius:9px;padding:11px 13px;margin-bottom:14px;font-size:13px;line-height:1.35}
+.photo-preview{width:170px;height:170px;margin:0 auto 16px;border-radius:14px;overflow:hidden;background:#eee;border:1px solid #bbb}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.field{margin:0 0 13px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.field input,.field select{width:100%;height:50px;border:1px solid #aaa;border-radius:7px;background:#fff;color:#000!important;font-size:16px;padding:0 13px;outline:none}
+.field input::file-selector-button{background:#666;color:#fff;border:0;padding:9px 11px;margin-right:9px;border-radius:4px}
+.video-preview{width:100%;max-height:230px;background:#111;border-radius:8px;overflow:hidden;margin-top:8px}.video-preview video{display:block;width:100%;max-height:230px}
+.save{width:100%;height:56px;border:0;border-radius:7px;background:#198f5b;color:#fff;font-size:17px;font-weight:800;margin-top:4px;cursor:pointer}.small{font-size:12px;color:#777;margin-top:6px;line-height:1.4}
+
+/* Coupon: deliberately fixed to one viewport, no page scrolling */
+.coupon{display:flex;flex-direction:column;background:#fff}
+.coupon-card{flex:0 0 auto;margin:8px 20px 0;background:linear-gradient(105deg,#ff8075,#ffd477);border-radius:9px;padding:12px 20px 10px;box-shadow:0 4px 9px #999}
+.coupon-photo{width:min(31vw,145px);height:min(31vw,145px);border-radius:15px;overflow:hidden;margin:0 auto 5px;background:#ddd}.coupon-photo img{width:100%;height:100%;object-fit:cover}
+.nameid{text-align:center;font-size:20px;line-height:1.15;margin-bottom:9px}
+.detail{font-size:13px;line-height:1.15;margin:0 0 8px}.detail strong{display:block;margin-bottom:1px;font-size:13px}
+.instruction{text-align:center;font-size:clamp(17px,5vw,23px);line-height:1.12;padding:10px 20px 7px}
+.rate{text-align:center;margin:0 auto 9px;border:2px solid #7c1d2c;color:#111;background:#fff;border-radius:8px;padding:4px 14px;font-size:14px;font-weight:700;width:max-content}
+.meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 25px 12px}
+.meal{height:72px;border:0;border-radius:9px;background:linear-gradient(105deg,#ff8075,#ffd477);box-shadow:0 5px 8px #888;font-size:19px;color:#000;font-weight:500;cursor:pointer}
+.meal span{margin-left:5px}.meal:nth-child(3){grid-column:1/2}
+
+/* Mess pass */
+.pass{background:#e7e7e7;overflow:hidden}.pass-card{background:#fff;margin:0 12px;border-radius:0 0 15px 15px;overflow:hidden;height:calc(100dvh - 52px)}
+.pass-top{padding:16px 13px 10px;position:relative}.badge{position:absolute;right:12px;top:8px;width:28px;height:28px;border-radius:50%;background:#b3b3b3;display:flex;align-items:center;justify-content:center;font-weight:800}
+.pass-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center}.frame{border:1px solid #000;padding:8px;background:#fff;box-shadow:0 4px 11px rgba(0,0,0,.45)}.frame img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.pass-text{font-weight:800;font-size:14px;margin-top:5px;line-height:1.25}.pass-sub{font-weight:700;font-size:12px;margin-top:1px;line-height:1.25}.qr-frame{padding:7px}.qr-frame img{background:#fff}
+.info{text-align:center;font-size:12px;line-height:1.35;padding:10px 12px 4px}.date-row{display:flex;justify-content:space-between;padding:3px 28px;font-size:15px;font-weight:800;margin:5px 0 7px}.approved{font-family:Arial,sans-serif;text-align:center;color:#62c354;font-size:23px;font-weight:800;margin:6px 0 8px;text-shadow:0 0 10px rgba(98,195,84,.4)}
+.rate-pass{text-align:center}.rate-pass .rate{margin-bottom:8px}.video-strip{background:var(--accent,#062506);padding:8px}.video-box{background:#fff;width:100%;height:130px;overflow:hidden;display:flex;align-items:center;justify-content:center}.video-box video{width:100%;height:100%;object-fit:contain;background:#fff}.video-empty{color:#999;font-size:12px;text-align:center;padding:20px}
+.footer{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;padding:9px 16px;background:#fff}.gray{color:#9a9a9a;font-size:10px;font-weight:600;margin-top:2px}.value{color:#000;font-size:11px;font-weight:600;margin-top:1px;line-height:1.25}
+
+/* Camera scanner */
+.scanner{width:100%;height:100dvh;background:#202020;min-height:100dvh;color:#fff;position:relative;overflow:hidden}
+.scanner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#202020}
+.camera-shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 25%,transparent 72%,rgba(0,0,0,.42));pointer-events:none}
+.scan-frame{position:absolute;left:12%;right:12%;top:28%;height:44%;border:2px solid rgba(255,255,255,.75);border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.18);pointer-events:none}
+.scan-line{position:absolute;left:12%;right:12%;top:29%;height:2px;background:#d21f45;box-shadow:0 0 12px #ff3d67;animation:scan 1.35s ease-in-out infinite alternate;pointer-events:none}
+.dot{position:absolute;width:7px;height:7px;background:#ffd21a;border-radius:50%;animation:float 2s infinite alternate ease-in-out;pointer-events:none}.d1{left:25%;top:42%}.d2{left:58%;top:38%}.d3{left:72%;top:54%}.d4{left:38%;top:63%}.d5{left:64%;top:67%}
+.scanner-title{position:absolute;top:calc(16px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:18px;font-weight:800;text-shadow:0 2px 6px #000;z-index:3}.scanner-status{position:absolute;bottom:32px;left:18px;right:18px;text-align:center;font-size:13px;font-weight:700;text-shadow:0 2px 5px #000;z-index:3}.camera-denied{position:absolute;left:20px;right:20px;top:45%;text-align:center;font-weight:700;font-size:15px;z-index:4;display:none}
+@keyframes scan{from{top:29%}to{top:70%}}@keyframes float{from{transform:translateY(-10px)}to{transform:translateY(14px)}}
+
+@media(max-width:360px){.coupon-card{margin-left:14px;margin-right:14px;padding-left:14px;padding-right:14px}.coupon-photo{width:120px;height:120px}.detail{font-size:12px;margin-bottom:6px}.detail strong{font-size:12px}.meal-grid{padding-left:16px;padding-right:16px;gap:9px}.meal{height:66px;font-size:17px}.instruction{font-size:16px}.rate{font-size:13px}}
 </style>
 </head>
 <body>
 <div class="app" id="app"></div>
 <script>
-const KEY='messPassProfileV7';
-let profile=null, selectedMeal='Lunch', selectedVideoUrl='';
+const KEY='messPassProfileV9';
+let profile=null, selectedMeal='Lunch', activeStream=null;
 const app=document.getElementById('app');
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function getProfile(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}}
 function saveProfile(p){localStorage.setItem(KEY,JSON.stringify(p));profile=p}
+async function enterFullscreen(){
+  try{if(!document.fullscreenElement && document.documentElement.requestFullscreen){await document.documentElement.requestFullscreen({navigationUI:'hide'})}}catch(e){}
+  try{if(screen.orientation?.lock) await screen.orientation.lock('portrait')}catch(e){}
+}
+function exitFullscreen(){try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}}
 function showForm(){
  app.innerHTML=`<div class="screen"><div class="header">Fill Profile</div><div class="form-wrap">
  <div class="notice">✓ Fill this once. Your profile is saved on this device and reused next time.</div>
@@ -36,18 +91,42 @@ function showForm(){
  <div class="field"><label>Pass Accent Color</label><input id="accent" type="color" value="${profile?.accent||'#062506'}"></div>
  <button class="save" id="save">💾 SAVE PROFILE</button></div></div>`;
  const photo=document.getElementById('photo'); photo.addEventListener('change',e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=()=>{document.getElementById('photoPreview').src=r.result;document.getElementById('photoPreview').style.display='block'};r.readAsDataURL(f)}});
- if(profile?.video){renderVideoPreview(profile.video)}
+ if(profile?.video)renderVideoPreview(profile.video);
  document.getElementById('video').addEventListener('change',e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=()=>renderVideoPreview(r.result);r.readAsDataURL(f)}});
  document.getElementById('save').onclick=()=>{const p={name:v('name'),id:v('id'),mess:v('mess'),program:v('program'),father:v('father'),mother:v('mother'),hostel:v('hostel'),accent:document.getElementById('accent').value,photo:document.getElementById('photoPreview').src,video:document.getElementById('video').files[0]?null:(profile?.video||null)};const file=document.getElementById('video').files[0];if(file){const r=new FileReader();r.onload=()=>{p.video=r.result;saveProfile(p);showCoupon()};r.readAsDataURL(file)}else{saveProfile(p);showCoupon()}};
 }
 function renderVideoPreview(src){document.getElementById('videoPreviewWrap').innerHTML=`<div class="video-preview"><video src="${src}" controls muted></video></div>`}
 function field(id,label,val){return `<div class="field"><label>${label}</label><input id="${id}" type="text" value="${esc(val)}"></div>`}
 function v(id){return document.getElementById(id).value}
-function showCoupon(){profile=getProfile();if(!profile){showForm();return}app.innerHTML=`<div class="coupon"><div class="header"><span class="back">‹</span>Mess Coupon<span class="x">×</span></div><div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div><div class="instruction">Tap on the meal name to scan<br>and avail food.</div><div class="rate">⭐ RATE US</div><div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div></div>`;document.querySelectorAll('.meal').forEach(b=>b.onclick=()=>{selectedMeal=b.dataset.meal;showScanner()});document.getElementById('profilePhotoAccess').ondblclick=showForm}
-function showScanner(){app.innerHTML=`<div class="scanner"><div class="scanner-camera"></div><div class="scan-line"></div><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="dot d4"></span><span class="dot d5"></span></div>`;setTimeout(showPass,4000)}
+function showCoupon(){
+ profile=getProfile();if(!profile){showForm();return}
+ app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Coupon<button class="fullscreen-btn" id="fs">FULLSCREEN</button><span class="x">×</span></div>
+ <div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}" alt="Profile"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div>
+ <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><div class="rate">⭐ RATE US</div>
+ <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div></div>`;
+ document.getElementById('fs').onclick=enterFullscreen;
+ document.querySelectorAll('.meal').forEach(b=>b.onclick=async()=>{selectedMeal=b.dataset.meal;await enterFullscreen();showScanner()});
+ document.getElementById('profilePhotoAccess').ondblclick=showForm;
+}
+async function showScanner(){
+ if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}
+ app.innerHTML=`<div class="scanner"><video id="camera" autoplay muted playsinline></video><div class="camera-shade"></div><div class="scan-frame"></div><div class="scan-line"></div><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="dot d4"></span><span class="dot d5"></span><div class="scanner-title">Scanning ${esc(selectedMeal)}</div><div class="scanner-status" id="scannerStatus">Camera access requested…</div><div class="camera-denied" id="cameraDenied">Camera access was blocked. Allow camera permission and try again.</div></div>`;
+ const video=document.getElementById('camera');
+ try{
+   activeStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+   video.srcObject=activeStream;
+   document.getElementById('scannerStatus').textContent='Scanning…';
+ }catch(err){
+   document.getElementById('scannerStatus').textContent='Camera unavailable';
+   document.getElementById('cameraDenied').style.display='block';
+ }
+ setTimeout(showPass,4500);
+}
+function stopCamera(){if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}}
 function makeQR(){const data=encodeURIComponent(`${profile.id}-${profile.name} - MESS PASS VERIFICATION SYSTEM ACCREDITED`);return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${data}&ecc=H&margin=10`}
-function showPass(){profile=getProfile();const now=new Date();const date=now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});const time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});app.innerHTML=`<div class="pass"><div class="header">Mess Pass<span class="x">×</span></div><div class="pass-card"><div class="pass-top"><div class="badge">27</div><div class="pass-grid"><div><div class="frame"><img src="${profile.photo}"></div><div class="pass-text">${esc(profile.id)}</div><div class="pass-sub">${esc(profile.name)}</div></div><div><div class="frame qr-frame"><img src="${makeQR()}" alt="QR"></div><div class="pass-text">${selectedMeal}</div><div class="pass-sub">${esc(profile.mess)}</div></div></div></div><div class="info"><div style="margin-bottom:18px">${esc(profile.program)}</div><div style="font-weight:700">Your Assigned Mess - ${esc(profile.mess)}</div></div><div class="date-row"><span>${date}</span><span>${time}</span></div><div class="approved">Meal Approved</div><div class="rate-pass"><div class="rate">⭐ RATE US</div></div><div class="video-strip" style="--accent:${profile.accent}"><div class="video-box">${profile.video?`<video src="${profile.video}" autoplay loop muted playsinline></video>`:`<div class="video-empty">No accepted badge video uploaded.<br>Double-click the profile photo on the coupon page to add one.</div>`}</div></div><div class="footer"><div class="gray">Father's Name</div><div class="value">${esc(profile.father)}</div><div class="gray">Mother's Name</div><div class="value">${esc(profile.mother)}</div><div class="gray">Program</div><div class="value">${esc(profile.program)}</div><div class="gray">Hostel</div><div class="value">${esc(profile.hostel)}</div></div></div></div>`}
+function showPass(){stopCamera();profile=getProfile();const now=new Date();const date=now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});const time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});app.innerHTML=`<div class="pass"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Pass<span class="x">×</span></div><div class="pass-card"><div class="pass-top"><div class="badge">27</div><div class="pass-grid"><div><div class="frame"><img src="${profile.photo}"></div><div class="pass-text">${esc(profile.id)}</div><div class="pass-sub">${esc(profile.name)}</div></div><div><div class="frame qr-frame"><img src="${makeQR()}" alt="QR"></div><div class="pass-text">${selectedMeal}</div><div class="pass-sub">${esc(profile.mess)}</div></div></div></div><div class="info"><div style="margin-bottom:5px">${esc(profile.program)}</div><div style="font-weight:700">Your Assigned Mess - ${esc(profile.mess)}</div></div><div class="date-row"><span>${date}</span><span>${time}</span></div><div class="approved">Meal Approved</div><div class="rate-pass"><div class="rate">⭐ RATE US</div></div><div class="video-strip" style="--accent:${profile.accent}"><div class="video-box">${profile.video?`<video src="${profile.video}" autoplay loop muted playsinline></video>`:`<div class="video-empty">No accepted badge video uploaded.<br>Double-click the profile photo on the coupon page to add one.</div>`}</div></div><div class="footer"><div><div class="gray">Father's Name</div><div class="value">${esc(profile.father)}</div></div><div><div class="gray">Mother's Name</div><div class="value">${esc(profile.mother)}</div></div><div><div class="gray">Program</div><div class="value">${esc(profile.program)}</div></div><div><div class="gray">Hostel</div><div class="value">${esc(profile.hostel)}</div></div></div></div></div>`}
 profile=getProfile();if(profile)showCoupon();else showForm();
-if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{})); }
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+window.addEventListener('pagehide',stopCamera);
 </script>
 </body></html>
