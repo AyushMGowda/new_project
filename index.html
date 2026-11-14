@@ -158,6 +158,33 @@ button,input{font:inherit}
     .instruction{font-size:16px;padding-top:28px}
     .rate{font-size:13px;margin-bottom:24px}
 }
+
+/* Feedback overlay */
+.feedback-overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:100;display:flex;flex-direction:column;overflow:hidden}
+.feedback-panel{width:100%;max-width:430px;height:100dvh;margin:0 auto;background:#fff;display:flex;flex-direction:column;overflow:hidden}
+.feedback-header{height:70px;min-height:70px;background:#303030;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:19px;font-weight:500;box-shadow:0 2px 5px rgba(0,0,0,.35);z-index:2}
+.feedback-header .close{position:absolute;right:22px;top:14px;font-size:36px;font-weight:300;line-height:1;color:#fff;cursor:pointer}
+.feedback-header .handle{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:64px;height:7px;border-radius:10px;background:#ddd}
+.feedback-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:#fff;padding:32px 22px 42px}
+.feedback-title{text-align:center;font-size:34px;line-height:1.15;margin:0 0 22px}
+.feedback-subtitle{text-align:center;font-size:24px;line-height:1.25;margin:0 0 26px}
+.feedback-stars{display:flex;justify-content:center;gap:15px;margin:0 0 30px}
+.feedback-star{border:0;background:none;padding:0;color:#f5b800;font-size:57px;line-height:1;cursor:pointer;font-family:Arial,sans-serif;transition:transform .12s ease}
+.feedback-star:active{transform:scale(.9)}
+.feedback-star.empty{color:#f5b800}
+.feedback-form{display:none}
+.feedback-form.show{display:block}
+.meal-prompt{text-align:left;font-size:20px;margin:0 0 18px}
+.meal-types{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:38px}
+.meal-type{height:52px;border:3px solid #888;border-radius:15px;background:#fff;font-size:17px;font-weight:500;cursor:pointer}
+.meal-type.selected{border-color:#222;background:#f2f2f2}
+.feedback-section-title{text-align:center;font-size:25px;text-decoration:underline;margin:0 0 20px}
+.feedback-list{background:#fff;margin:0 0 38px;border-top:1px solid #eee}
+.feedback-row{min-height:66px;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:19px}
+.feedback-row input{width:28px;height:28px;accent-color:#777;cursor:pointer}
+.remarks{width:100%;height:110px;border:1px solid #bbb;padding:12px;font-size:18px;resize:none;margin:0 0 28px}
+.submit-feedback{display:block;width:285px;height:58px;margin:0 auto;border:0;border-radius:8px;background:linear-gradient(105deg,#ff8075,#ffd477);box-shadow:0 5px 8px #888;font-size:22px;cursor:pointer}
+.feedback-thanks{text-align:center;font-size:20px;margin-top:16px;color:#555;display:none}
 </style>
 </head>
 <body>
@@ -197,11 +224,73 @@ function showCoupon(){
  profile=getProfile();if(!profile){showForm();return}
  app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Coupon<span class="x">×</span></div><div class="coupon-shell">
  <div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}" alt="Profile"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div>
- <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><div class="rate">⭐ RATE US</div>
+ <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><div class="rate" id="rateUs">⭐ RATE US</div>
  <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div></div></div>`;
  document.querySelectorAll('.meal').forEach(b=>b.onclick=async()=>{selectedMeal=b.dataset.meal;await enterFullscreen();showScanner()});
  document.getElementById('profilePhotoAccess').ondblclick=showForm;
+ document.getElementById('rateUs').onclick=showFeedback;
 }
+function showFeedback(){
+ const overlay=document.createElement('div');
+ overlay.className='feedback-overlay';
+ overlay.id='feedbackOverlay';
+ overlay.innerHTML=`<div class="feedback-panel">
+   <div class="feedback-header"><div class="handle"></div>Feedback<span class="close" onclick="closeFeedback()">×</span></div>
+   <div class="feedback-scroll">
+     <h2 class="feedback-title">Mess Feedback</h2>
+     <div class="feedback-subtitle">Tell us how we did!</div>
+     <div class="feedback-stars" id="feedbackStars">
+       <button class="feedback-star empty" data-star="1">☆</button>
+       <button class="feedback-star empty" data-star="2">☆</button>
+       <button class="feedback-star empty" data-star="3">☆</button>
+       <button class="feedback-star empty" data-star="4">☆</button>
+       <button class="feedback-star empty" data-star="5">☆</button>
+     </div>
+     <div class="feedback-form" id="feedbackForm">
+       <div class="meal-prompt">Tap to select meal type</div>
+       <div class="meal-types">
+         <button class="meal-type">Breakfast</button><button class="meal-type">Lunch</button><button class="meal-type">Tea</button><button class="meal-type">Dinner</button>
+       </div>
+       <h3 class="feedback-section-title">Service/Staff</h3>
+       <div class="feedback-list">
+         <label class="feedback-row">Food served late<input type="checkbox"></label>
+         <label class="feedback-row">Staff not polite<input type="checkbox"></label>
+       </div>
+       <h3 class="feedback-section-title">Quantity</h3>
+       <div class="feedback-list">
+         <label class="feedback-row">Refills not available<input type="checkbox"></label>
+         <label class="feedback-row">Less food<input type="checkbox"></label>
+       </div>
+       <h3 class="feedback-section-title">Hygiene</h3>
+       <div class="feedback-list">
+         <label class="feedback-row">Staff not hygienic<input type="checkbox"></label>
+         <label class="feedback-row">Utensils dirty<input type="checkbox"></label>
+         <label class="feedback-row">Mess not clean<input type="checkbox"></label>
+       </div>
+       <h3 class="feedback-section-title">Food Quality</h3>
+       <div class="feedback-list">
+         <label class="feedback-row">Not fresh<input type="checkbox"></label>
+         <label class="feedback-row">Undercooked / overcooked<input type="checkbox"></label>
+         <label class="feedback-row">Too oily/greasy<input type="checkbox"></label>
+       </div>
+       <h3 class="feedback-section-title">Remarks (If Any)</h3>
+       <textarea class="remarks" placeholder=""></textarea>
+       <button class="submit-feedback" onclick="submitFeedback()">Submit</button>
+       <div class="feedback-thanks" id="feedbackThanks">Thanks for your feedback.</div>
+     </div>
+   </div>
+ </div>`;
+ document.body.appendChild(overlay);
+ overlay.querySelectorAll('.feedback-star').forEach(star=>star.onclick=()=>selectRating(Number(star.dataset.star)));
+ overlay.querySelectorAll('.meal-type').forEach(btn=>btn.onclick=()=>{overlay.querySelectorAll('.meal-type').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected')});
+}
+function selectRating(rating){
+ const overlay=document.getElementById('feedbackOverlay');if(!overlay)return;
+ overlay.querySelectorAll('.feedback-star').forEach((star,i)=>{star.textContent=i<rating?'★':'☆';star.classList.toggle('empty',i>=rating)});
+ overlay.querySelector('#feedbackForm').classList.add('show');
+}
+function closeFeedback(){const overlay=document.getElementById('feedbackOverlay');if(overlay)overlay.remove()}
+function submitFeedback(){const thanks=document.getElementById('feedbackThanks');if(thanks){thanks.style.display='block';thanks.scrollIntoView({behavior:'smooth',block:'center'})}}
 async function showScanner(){
  if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}
  app.innerHTML=`<div class="scanner"><video id="camera" autoplay muted playsinline></video><div class="camera-shade"></div><div class="scan-frame"></div><div class="scan-line"></div><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="dot d4"></span><span class="dot d5"></span><div class="scanner-title">Scanning ${esc(selectedMeal)}</div><div class="scanner-status" id="scannerStatus">Camera access requested…</div><div class="camera-denied" id="cameraDenied">Camera access was blocked. Allow camera permission and try again.</div></div>`;
