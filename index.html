@@ -159,32 +159,244 @@ button,input{font:inherit}
     .rate{font-size:13px;margin-bottom:24px}
 }
 
-/* Feedback overlay */
-.feedback-overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:100;display:flex;flex-direction:column;overflow:hidden}
-.feedback-panel{width:100%;max-width:430px;height:100dvh;margin:0 auto;background:#fff;display:flex;flex-direction:column;overflow:hidden}
-.feedback-header{height:70px;min-height:70px;background:#303030;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:19px;font-weight:500;box-shadow:0 2px 5px rgba(0,0,0,.35);z-index:2}
-.feedback-header .close{position:absolute;right:22px;top:14px;font-size:36px;font-weight:300;line-height:1;color:#fff;cursor:pointer}
-.feedback-header .handle{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:64px;height:7px;border-radius:10px;background:#ddd}
-.feedback-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;background:#fff;padding:32px 22px 42px}
-.feedback-title{text-align:center;font-size:34px;line-height:1.15;margin:0 0 22px}
-.feedback-subtitle{text-align:center;font-size:24px;line-height:1.25;margin:0 0 26px}
-.feedback-stars{display:flex;justify-content:center;gap:15px;margin:0 0 30px}
-.feedback-star{border:0;background:none;padding:0;color:#f5b800;font-size:57px;line-height:1;cursor:pointer;font-family:Arial,sans-serif;transition:transform .12s ease}
-.feedback-star:active{transform:scale(.9)}
-.feedback-star.empty{color:#f5b800}
-.feedback-form{display:none}
+/* Feedback modal */
+.feedback-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.48);
+    z-index:100;
+    display:none;
+    align-items:flex-end;
+}
+.feedback-backdrop.open{display:flex}
+.feedback-modal{
+    width:100%;
+    max-width:430px;
+    height:100dvh;
+    margin:0 auto;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+.feedback-header{
+    height:52px;
+    min-height:52px;
+    background:#303030;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    font-size:19px;
+    font-weight:500;
+    box-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+.feedback-header .feedback-close{
+    position:absolute;
+    right:16px;
+    top:7px;
+    color:#fff;
+    font-size:34px;
+    line-height:1;
+    font-weight:300;
+    cursor:pointer;
+}
+.feedback-grabber{
+    position:absolute;
+    top:8px;
+    left:50%;
+    transform:translateX(-50%);
+    width:56px;
+    height:5px;
+    border-radius:8px;
+    background:#ddd;
+}
+.feedback-scroll{
+    flex:1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    padding:20px 0 36px;
+}
+.feedback-intro{
+    text-align:center;
+    padding:0 20px;
+}
+.feedback-title{
+    margin:0;
+    font-size:25px;
+    line-height:1.15;
+    font-weight:700;
+}
+.feedback-subtitle{
+    margin:20px 0 24px;
+    font-size:20px;
+    line-height:1.2;
+}
+.feedback-stars{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin:0 auto 28px;
+}
+.feedback-star{
+    border:0;
+    background:transparent;
+    padding:0;
+    width:42px;
+    height:48px;
+    font-size:43px;
+    line-height:1;
+    color:#f2b600;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+}
+.feedback-star:focus{outline:none}
+.feedback-star.empty{color:#f2b600}
+.feedback-form{display:none;padding:0 20px}
 .feedback-form.show{display:block}
-.meal-prompt{text-align:left;font-size:20px;margin:0 0 18px}
-.meal-types{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:38px}
-.meal-type{height:52px;border:3px solid #888;border-radius:15px;background:#fff;font-size:17px;font-weight:500;cursor:pointer}
-.meal-type.selected{border-color:#222;background:#f2f2f2}
-.feedback-section-title{text-align:center;font-size:25px;text-decoration:underline;margin:0 0 20px}
-.feedback-list{background:#fff;margin:0 0 38px;border-top:1px solid #eee}
-.feedback-row{min-height:66px;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:19px}
-.feedback-row input{width:28px;height:28px;accent-color:#777;cursor:pointer}
-.remarks{width:100%;height:110px;border:1px solid #bbb;padding:12px;font-size:18px;resize:none;margin:0 0 28px}
-.submit-feedback{display:block;width:285px;height:58px;margin:0 auto;border:0;border-radius:8px;background:linear-gradient(105deg,#ff8075,#ffd477);box-shadow:0 5px 8px #888;font-size:22px;cursor:pointer}
-.feedback-thanks{text-align:center;font-size:20px;margin-top:16px;color:#555;display:none}
+.feedback-label{
+    font-size:18px;
+    margin:4px 0 20px;
+}
+.feedback-section{
+    margin:0 0 28px;
+}
+.feedback-section-title{
+    text-align:center;
+    text-decoration:underline;
+    font-size:18px;
+    margin:0 0 18px;
+}
+.feedback-options{
+    background:#fff;
+    border:1px solid #f0f0f0;
+}
+.feedback-option{
+    min-height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:0 16px;
+    border-bottom:1px solid #ddd;
+    font-size:17px;
+}
+.feedback-option:last-child{border-bottom:0}
+.feedback-option input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    border:2px solid #888;
+    border-radius:2px;
+    background:#fff;
+    flex:0 0 auto;
+    position:relative;
+}
+.feedback-option input:checked{
+    background:#ff7a22;
+    border-color:#ff7a22;
+}
+.feedback-option input:checked::after{
+    content:'✓';
+    position:absolute;
+    color:#fff;
+    font-size:15px;
+    font-weight:800;
+    left:2px;
+    top:-1px;
+}
+.feedback-meals{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+.feedback-meal{
+    min-width:0;
+    height:50px;
+    border:2px solid #999;
+    border-radius:16px;
+    background:#fff;
+    font-size:16px;
+    cursor:pointer;
+}
+.feedback-meal.selected{
+    border-color:#ff7a22;
+    box-shadow:0 0 0 2px rgba(255,122,34,.12);
+}
+.feedback-remarks{
+    width:100%;
+    min-height:76px;
+    resize:none;
+    border:1px solid #bbb;
+    border-radius:3px;
+    padding:10px;
+    font-size:16px;
+    outline:none;
+}
+.feedback-submit{
+    display:block;
+    width:285px;
+    max-width:90%;
+    height:58px;
+    margin:24px auto 0;
+    border:0;
+    border-radius:8px;
+    background:linear-gradient(105deg,#ff8075,#ffd477);
+    box-shadow:0 5px 8px #888;
+    font-size:21px;
+    color:#111;
+    cursor:pointer;
+}
+.feedback-message{
+    position:fixed;
+    inset:0;
+    z-index:120;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(0,0,0,.28);
+}
+.feedback-message.show{display:flex}
+.feedback-message-box{
+    width:300px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 12px 35px rgba(0,0,0,.35);
+    text-align:center;
+}
+.feedback-message-box h3{
+    margin:20px 12px 8px;
+    font-size:18px;
+}
+.feedback-message-box p{
+    margin:0 18px 20px;
+    font-size:14px;
+    line-height:1.45;
+}
+.feedback-message-box button{
+    width:100%;
+    height:48px;
+    border:0;
+    border-top:1px solid #ddd;
+    background:#fff;
+    color:#ff7a22;
+    font-size:18px;
+    cursor:pointer;
+}
+@media(max-width:360px){
+    .feedback-stars{gap:10px}
+    .feedback-star{width:38px;font-size:39px}
+    .feedback-title{font-size:23px}
+    .feedback-subtitle{font-size:18px}
+    .feedback-meals{gap:8px}
+    .feedback-meal{font-size:14px}
+}
+
 </style>
 </head>
 <body>
@@ -218,79 +430,138 @@ function showForm(){
 function renderVideoPreview(src){document.getElementById('videoPreviewWrap').innerHTML=`<div class="video-preview"><video src="${src}" controls muted></video></div>`}
 function field(id,label,val){return `<div class="field"><label>${label}</label><input id="${id}" type="text" value="${esc(val)}"></div>`}
 function v(id){return document.getElementById(id).value}
+
+function closeFeedback(){
+    const modal=document.getElementById('feedbackModal');
+    if(modal)modal.classList.remove('open');
+    const msg=document.getElementById('feedbackMessage');
+    if(msg)msg.classList.remove('show');
+}
+function openFeedback(){
+    const modal=document.getElementById('feedbackModal');
+    if(!modal)return;
+    modal.classList.add('open');
+    document.getElementById('feedbackForm').classList.remove('show');
+    document.getElementById('feedbackScroll').scrollTop=0;
+    document.querySelectorAll('.feedback-star').forEach(star=>{
+        star.textContent='☆';
+        star.classList.add('empty');
+    });
+}
+function selectFeedbackRating(rating){
+    document.querySelectorAll('.feedback-star').forEach(star=>{
+        const n=Number(star.dataset.rating);
+        star.textContent=n<=rating?'★':'☆';
+        star.classList.toggle('empty',n>rating);
+    });
+    const form=document.getElementById('feedbackForm');
+    form.classList.add('show');
+    setTimeout(()=>{
+        document.getElementById('feedbackScroll').scrollTo({
+            top:document.querySelector('.feedback-form').offsetTop-8,
+            behavior:'smooth'
+        });
+    },30);
+}
+function submitFeedback(){
+    const msg=document.getElementById('feedbackMessage');
+    if(msg)msg.classList.add('show');
+}
 function showCoupon(){
  if(passTimer){clearInterval(passTimer);passTimer=null}
  if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}
  profile=getProfile();if(!profile){showForm();return}
  app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Coupon<span class="x">×</span></div><div class="coupon-shell">
  <div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}" alt="Profile"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div>
- <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><div class="rate" id="rateUs">⭐ RATE US</div>
- <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div></div></div>`;
- document.querySelectorAll('.meal').forEach(b=>b.onclick=async()=>{selectedMeal=b.dataset.meal;await enterFullscreen();showScanner()});
- document.getElementById('profilePhotoAccess').ondblclick=showForm;
- document.getElementById('rateUs').onclick=showFeedback;
-}
-function showFeedback(){
- const overlay=document.createElement('div');
- overlay.className='feedback-overlay';
- overlay.id='feedbackOverlay';
- overlay.innerHTML=`<div class="feedback-panel">
-   <div class="feedback-header"><div class="handle"></div>Feedback<span class="close" onclick="closeFeedback()">×</span></div>
-   <div class="feedback-scroll">
-     <h2 class="feedback-title">Mess Feedback</h2>
-     <div class="feedback-subtitle">Tell us how we did!</div>
-     <div class="feedback-stars" id="feedbackStars">
-       <button class="feedback-star empty" data-star="1">☆</button>
-       <button class="feedback-star empty" data-star="2">☆</button>
-       <button class="feedback-star empty" data-star="3">☆</button>
-       <button class="feedback-star empty" data-star="4">☆</button>
-       <button class="feedback-star empty" data-star="5">☆</button>
-     </div>
-     <div class="feedback-form" id="feedbackForm">
-       <div class="meal-prompt">Tap to select meal type</div>
-       <div class="meal-types">
-         <button class="meal-type">Breakfast</button><button class="meal-type">Lunch</button><button class="meal-type">Tea</button><button class="meal-type">Dinner</button>
+ <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><button class="rate" id="rateUsBtn" type="button">⭐ RATE US</button>
+ <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div>
+ <div class="feedback-backdrop" id="feedbackModal">
+   <div class="feedback-modal">
+     <div class="feedback-header"><div class="feedback-grabber"></div>Feedback<button class="feedback-close" id="feedbackClose" type="button">×</button></div>
+     <div class="feedback-scroll" id="feedbackScroll">
+       <div class="feedback-intro">
+         <h2 class="feedback-title">Mess Feedback</h2>
+         <div class="feedback-subtitle">Tell us how we did!</div>
+         <div class="feedback-stars" id="feedbackStars">
+           <button class="feedback-star" data-rating="1" type="button">☆</button>
+           <button class="feedback-star" data-rating="2" type="button">☆</button>
+           <button class="feedback-star" data-rating="3" type="button">☆</button>
+           <button class="feedback-star" data-rating="4" type="button">☆</button>
+           <button class="feedback-star" data-rating="5" type="button">☆</button>
+         </div>
        </div>
-       <h3 class="feedback-section-title">Service/Staff</h3>
-       <div class="feedback-list">
-         <label class="feedback-row">Food served late<input type="checkbox"></label>
-         <label class="feedback-row">Staff not polite<input type="checkbox"></label>
+       <div class="feedback-form" id="feedbackForm">
+         <div class="feedback-label">Tap to select meal type</div>
+         <div class="feedback-section">
+           <div class="feedback-meals" id="feedbackMeals">
+             <button class="feedback-meal" data-meal="Breakfast" type="button">Breakfast</button>
+             <button class="feedback-meal" data-meal="Lunch" type="button">Lunch</button>
+             <button class="feedback-meal" data-meal="Tea" type="button">Tea</button>
+             <button class="feedback-meal" data-meal="Dinner" type="button">Dinner</button>
+           </div>
+         </div>
+         <div class="feedback-section">
+           <h3 class="feedback-section-title">Service/Staff</h3>
+           <div class="feedback-options">
+             <label class="feedback-option"><span>Food served late</span><input type="checkbox"></label>
+             <label class="feedback-option"><span>Staff not polite</span><input type="checkbox"></label>
+           </div>
+         </div>
+         <div class="feedback-section">
+           <h3 class="feedback-section-title">Quantity</h3>
+           <div class="feedback-options">
+             <label class="feedback-option"><span>Refills not available</span><input type="checkbox"></label>
+             <label class="feedback-option"><span>Less food</span><input type="checkbox"></label>
+           </div>
+         </div>
+         <div class="feedback-section">
+           <h3 class="feedback-section-title">Hygiene</h3>
+           <div class="feedback-options">
+             <label class="feedback-option"><span>Staff not hygienic</span><input type="checkbox"></label>
+             <label class="feedback-option"><span>Utensils dirty</span><input type="checkbox"></label>
+             <label class="feedback-option"><span>Mess not clean</span><input type="checkbox"></label>
+           </div>
+         </div>
+         <div class="feedback-section">
+           <h3 class="feedback-section-title">Food Quality</h3>
+           <div class="feedback-options">
+             <label class="feedback-option"><span>Not fresh</span><input type="checkbox"></label>
+             <label class="feedback-option"><span>Undercooked / overcooked</span><input type="checkbox"></label>
+             <label class="feedback-option"><span>Too oily/greasy</span><input type="checkbox"></label>
+           </div>
+         </div>
+         <div class="feedback-section">
+           <h3 class="feedback-section-title">Remarks (If Any)</h3>
+           <textarea class="feedback-remarks" id="feedbackRemarks"></textarea>
+         </div>
+         <button class="feedback-submit" id="feedbackSubmit" type="button">Submit</button>
        </div>
-       <h3 class="feedback-section-title">Quantity</h3>
-       <div class="feedback-list">
-         <label class="feedback-row">Refills not available<input type="checkbox"></label>
-         <label class="feedback-row">Less food<input type="checkbox"></label>
-       </div>
-       <h3 class="feedback-section-title">Hygiene</h3>
-       <div class="feedback-list">
-         <label class="feedback-row">Staff not hygienic<input type="checkbox"></label>
-         <label class="feedback-row">Utensils dirty<input type="checkbox"></label>
-         <label class="feedback-row">Mess not clean<input type="checkbox"></label>
-       </div>
-       <h3 class="feedback-section-title">Food Quality</h3>
-       <div class="feedback-list">
-         <label class="feedback-row">Not fresh<input type="checkbox"></label>
-         <label class="feedback-row">Undercooked / overcooked<input type="checkbox"></label>
-         <label class="feedback-row">Too oily/greasy<input type="checkbox"></label>
-       </div>
-       <h3 class="feedback-section-title">Remarks (If Any)</h3>
-       <textarea class="remarks" placeholder=""></textarea>
-       <button class="submit-feedback" onclick="submitFeedback()">Submit</button>
-       <div class="feedback-thanks" id="feedbackThanks">Thanks for your feedback.</div>
      </div>
    </div>
- </div>`;
- document.body.appendChild(overlay);
- overlay.querySelectorAll('.feedback-star').forEach(star=>star.onclick=()=>selectRating(Number(star.dataset.star)));
- overlay.querySelectorAll('.meal-type').forEach(btn=>btn.onclick=()=>{overlay.querySelectorAll('.meal-type').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected')});
+ </div>
+ <div class="feedback-message" id="feedbackMessage">
+   <div class="feedback-message-box">
+     <h3>Message</h3>
+     <p>Thank you for your feedback! Your input<br>helps improve the mess service.</p>
+     <button id="feedbackOk" type="button">OK</button>
+   </div>
+ </div>
+ </div></div>`;
+ document.querySelectorAll('.meal').forEach(b=>b.onclick=async()=>{selectedMeal=b.dataset.meal;await enterFullscreen();showScanner()});
+ document.getElementById('profilePhotoAccess').ondblclick=showForm;
+ document.getElementById('rateUsBtn').onclick=openFeedback;
+ document.getElementById('feedbackClose').onclick=closeFeedback;
+ document.querySelectorAll('.feedback-star').forEach(star=>star.onclick=()=>selectFeedbackRating(Number(star.dataset.rating)));
+ document.querySelectorAll('.feedback-meal').forEach(btn=>btn.onclick=()=>{
+     document.querySelectorAll('.feedback-meal').forEach(x=>x.classList.remove('selected'));
+     btn.classList.add('selected');
+ });
+ document.getElementById('feedbackSubmit').onclick=submitFeedback;
+ document.getElementById('feedbackOk').onclick=()=>{
+     document.getElementById('feedbackMessage').classList.remove('show');
+     closeFeedback();
+ };
 }
-function selectRating(rating){
- const overlay=document.getElementById('feedbackOverlay');if(!overlay)return;
- overlay.querySelectorAll('.feedback-star').forEach((star,i)=>{star.textContent=i<rating?'★':'☆';star.classList.toggle('empty',i>=rating)});
- overlay.querySelector('#feedbackForm').classList.add('show');
-}
-function closeFeedback(){const overlay=document.getElementById('feedbackOverlay');if(overlay)overlay.remove()}
-function submitFeedback(){const thanks=document.getElementById('feedbackThanks');if(thanks){thanks.style.display='block';thanks.scrollIntoView({behavior:'smooth',block:'center'})}}
 async function showScanner(){
  if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}
  app.innerHTML=`<div class="scanner"><video id="camera" autoplay muted playsinline></video><div class="camera-shade"></div><div class="scan-frame"></div><div class="scan-line"></div><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="dot d4"></span><span class="dot d5"></span><div class="scanner-title">Scanning ${esc(selectedMeal)}</div><div class="scanner-status" id="scannerStatus">Camera access requested…</div><div class="camera-denied" id="cameraDenied">Camera access was blocked. Allow camera permission and try again.</div></div>`;
