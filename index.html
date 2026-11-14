@@ -45,14 +45,15 @@ button,input{font:inherit}
 .meal{height:72px;border:0;border-radius:9px;background:linear-gradient(105deg,#ff8075,#ffd477);box-shadow:0 5px 8px #888;font-size:19px;color:#000;font-weight:500;cursor:pointer}
 .meal span{margin-left:5px}.meal:nth-child(3){grid-column:1/2}
 
-/* Mess pass */
-.pass{background:#e7e7e7;overflow:hidden}.pass-card{background:#fff;margin:0 12px;border-radius:0 0 15px 15px;overflow:hidden;height:calc(100dvh - 52px)}
-.pass-top{padding:16px 13px 10px;position:relative}.badge{position:absolute;right:12px;top:8px;width:28px;height:28px;border-radius:50%;background:#b3b3b3;display:flex;align-items:center;justify-content:center;font-weight:800}
-.pass-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center}.frame{border:1px solid #000;padding:8px;background:#fff;box-shadow:0 4px 11px rgba(0,0,0,.45)}.frame img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
-.pass-text{font-weight:800;font-size:14px;margin-top:5px;line-height:1.25}.pass-sub{font-weight:700;font-size:12px;margin-top:1px;line-height:1.25}.qr-frame{padding:7px}.qr-frame img{background:#fff}
-.info{text-align:center;font-size:12px;line-height:1.35;padding:10px 12px 4px}.date-row{display:flex;justify-content:space-between;padding:3px 28px;font-size:15px;font-weight:800;margin:5px 0 7px}.approved{font-family:Arial,sans-serif;text-align:center;color:#62c354;font-size:23px;font-weight:800;margin:6px 0 8px;text-shadow:0 0 10px rgba(98,195,84,.4)}
-.rate-pass{text-align:center}.rate-pass .rate{margin-bottom:8px}.video-strip{background:var(--accent,#062506);padding:8px}.video-box{background:#fff;width:100%;height:130px;overflow:hidden;display:flex;align-items:center;justify-content:center}.video-box video{width:100%;height:100%;object-fit:contain;background:#fff}.video-empty{color:#999;font-size:12px;text-align:center;padding:20px}
-.footer{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;padding:9px 16px;background:#fff}.gray{color:#9a9a9a;font-size:10px;font-weight:600;margin-top:2px}.value{color:#000;font-size:11px;font-weight:600;margin-top:1px;line-height:1.25}
+/* Mess pass: intentionally scrollable, matching the larger original pass layout */
+.pass{background:#e7e7e7;min-height:100dvh;height:100dvh;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:18px}
+.pass-card{background:#fff;margin:0 15px;border-radius:0 0 15px 15px;overflow:hidden;min-height:0;height:auto}
+.pass-top{padding:68px 15px 18px;position:relative}.badge{position:absolute;right:12px;top:10px;width:31px;height:31px;border-radius:50%;background:#b3b3b3;display:flex;align-items:center;justify-content:center;font-weight:800}
+.pass-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;text-align:center}.frame{border:1px solid #000;padding:12px;background:#fff;box-shadow:0 6px 16px rgba(0,0,0,.5)}.frame img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.pass-text{font-weight:800;font-size:15px;margin-top:8px;line-height:1.4;text-shadow:1px 2px 4px rgba(0,0,0,.35)}.pass-sub{font-weight:700;font-size:14px;margin-top:2px;line-height:1.4}.qr-frame{padding:10px}.qr-frame img{background:#fff}
+.info{text-align:center;font-size:14px;line-height:1.6;padding:22px 15px 8px}.date-row{display:flex;justify-content:space-between;padding:5px 35px;font-size:18px;font-weight:800;margin:15px 0 18px}.approved{font-family:Arial,sans-serif;text-align:center;color:#62c354;font-size:28px;font-weight:800;margin:18px 0 14px;text-shadow:0 0 10px rgba(98,195,84,.4)}
+.rate-pass{text-align:center}.rate-pass .rate{margin-bottom:25px}.video-strip{background:var(--accent,#062506);padding:25px}.video-box{background:#fff;width:100%;aspect-ratio:1;overflow:hidden;display:flex;align-items:center;justify-content:center}.video-box video{width:100%;height:100%;object-fit:contain;background:#fff}.video-empty{color:#999;font-size:14px;text-align:center;padding:30px}
+.footer{padding:25px;background:#fff}.gray{color:#9a9a9a;font-size:14px;font-weight:600;margin-top:22px}.value{color:#000;font-size:15px;font-weight:600;margin-top:6px;line-height:1.4}
 
 /* Camera scanner */
 .scanner{width:100%;height:100dvh;background:#202020;min-height:100dvh;color:#fff;position:relative;overflow:hidden}
@@ -70,7 +71,7 @@ button,input{font:inherit}
 <body>
 <div class="app" id="app"></div>
 <script>
-const KEY='messPassProfileV9';
+const KEY='messPassProfileV10';
 let profile=null, selectedMeal='Lunch', activeStream=null;
 const app=document.getElementById('app');
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}

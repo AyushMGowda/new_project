@@ -1,4 +1,4 @@
-const CACHE = "mess-pass-v9";
+const CACHE = "mess-pass-v10";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./sw.js"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
