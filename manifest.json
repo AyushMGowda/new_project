@@ -1,0 +1,11 @@
+{
+  "name": "Mess Pass",
+  "short_name": "Mess Pass",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#111111",
+  "theme_color": "#262626",
+  "description": "Mess Pass prototype"
+}
