@@ -34,18 +34,98 @@ button,input{font:inherit}
 .video-preview{width:100%;max-height:230px;background:#111;border-radius:8px;overflow:hidden;margin-top:8px}.video-preview video{display:block;width:100%;max-height:230px}
 .save{width:100%;height:56px;border:0;border-radius:7px;background:#198f5b;color:#fff;font-size:17px;font-weight:800;margin-top:4px;cursor:pointer}.small{font-size:12px;color:#777;margin-top:6px;line-height:1.4}
 
-/* Coupon: deliberately fixed to one viewport, no page scrolling */
-.coupon{background:#e7e7e7;min-height:100dvh;height:auto;overflow:auto;padding-bottom:20px}
-.coupon-shell{background:#fff;margin:0 16px;border:1px solid #d7d7d7;border-top:0;box-shadow:0 2px 5px rgba(0,0,0,.22);overflow:hidden;padding-bottom:18px}
-.coupon-card{flex:0 0 auto;margin:8px 0 0;background:linear-gradient(105deg,#ff8075,#ffd477);border-radius:9px;padding:12px 18px 16px;box-shadow:0 4px 9px #999}
-.coupon-photo{width:min(29vw,120px);height:min(29vw,120px);border-radius:15px;overflow:hidden;margin:0 auto 5px;background:#ddd}.coupon-photo img{width:100%;height:100%;object-fit:cover}
-.nameid{text-align:center;font-size:17px;line-height:1.15;margin-bottom:9px}
-.detail{font-size:13px;line-height:1.15;margin:0 0 8px}.detail strong{display:block;margin-bottom:1px;font-size:13px}
-.instruction{text-align:center;font-size:clamp(17px,5vw,23px);line-height:1.12;padding:18px 20px 10px}
-.rate{text-align:center;margin:0 auto 11px;border:2px solid #7c1d2c;color:#111;background:#fff;border-radius:8px;padding:4px 14px;font-size:14px;font-weight:700;width:max-content}
-.meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0;margin:0 auto;max-width:296px}
-.meal{height:54px;border:0;border-radius:9px;background:linear-gradient(105deg,#ff8075,#ffd477);box-shadow:0 5px 8px #888;font-size:16px;color:#000;font-weight:500;cursor:pointer}
-.meal span{margin-left:4px}.meal:nth-child(3){grid-column:1/2}
+/* Coupon: one-screen layout, stretched like the reference */
+.coupon{
+    background:#e7e7e7;
+    height:calc(100dvh - 52px);
+    min-height:0;
+    overflow:hidden;
+    padding:10px 0 0;
+}
+.coupon-shell{
+    background:#fff;
+    height:100%;
+    margin:0 16px;
+    border:1px solid #d7d7d7;
+    border-top:0;
+    box-shadow:0 2px 5px rgba(0,0,0,.22);
+    overflow:hidden;
+    padding:0 0 20px;
+}
+.coupon-card{
+    flex:0 0 auto;
+    margin:0;
+    background:linear-gradient(105deg,#ff8075,#ffd477);
+    border-radius:9px;
+    padding:14px 20px 24px;
+    box-shadow:0 4px 9px #999;
+}
+.coupon-photo{
+    width:min(29vw,120px);
+    height:min(29vw,120px);
+    border-radius:15px;
+    overflow:hidden;
+    margin:0 auto 7px;
+    background:#ddd
+}
+.coupon-photo img{width:100%;height:100%;object-fit:cover}
+.nameid{
+    text-align:center;
+    font-size:17px;
+    line-height:1.2;
+    margin-bottom:17px
+}
+.detail{
+    font-size:13px;
+    line-height:1.25;
+    margin:0 0 13px
+}
+.detail strong{
+    display:block;
+    margin-bottom:2px;
+    font-size:13px
+}
+.detail:last-child{margin-bottom:0}
+
+.instruction{
+    text-align:center;
+    font-size:clamp(17px,5vw,23px);
+    line-height:1.2;
+    padding:34px 20px 14px
+}
+.rate{
+    text-align:center;
+    margin:0 auto 28px;
+    border:2px solid #7c1d2c;
+    color:#111;
+    background:#fff;
+    border-radius:8px;
+    padding:4px 14px;
+    font-size:14px;
+    font-weight:700;
+    width:max-content
+}
+.meal-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 14px;
+    padding:0 18px;
+    margin:0 auto;
+    max-width:360px
+}
+.meal{
+    height:54px;
+    border:0;
+    border-radius:9px;
+    background:linear-gradient(105deg,#ff8075,#ffd477);
+    box-shadow:0 5px 8px #888;
+    font-size:16px;
+    color:#000;
+    font-weight:500;
+    cursor:pointer
+}
+.meal span{margin-left:7px}
+.meal:nth-child(3){grid-column:1/2}
 
 /* Mess pass: intentionally scrollable, matching the larger original pass layout */
 .pass{background:#e7e7e7;min-height:100dvh;height:100dvh;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:18px}
@@ -67,7 +147,17 @@ button,input{font:inherit}
 .scanner-title{position:absolute;top:calc(16px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:18px;font-weight:800;text-shadow:0 2px 6px #000;z-index:3}.scanner-status{position:absolute;bottom:32px;left:18px;right:18px;text-align:center;font-size:13px;font-weight:700;text-shadow:0 2px 5px #000;z-index:3}.camera-denied{position:absolute;left:20px;right:20px;top:45%;text-align:center;font-weight:700;font-size:15px;z-index:4;display:none}
 @keyframes scan{from{top:29%}to{top:70%}}@keyframes float{from{transform:translateY(-10px)}to{transform:translateY(14px)}}
 
-@media(max-width:360px){.coupon-shell{margin-left:10px;margin-right:10px}.coupon-card{margin-left:0;margin-right:0;padding-left:14px;padding-right:14px}.coupon-photo{width:120px;height:120px}.detail{font-size:12px;margin-bottom:6px}.detail strong{font-size:12px}.meal-grid{padding-left:16px;padding-right:16px;gap:9px}.meal{height:66px;font-size:17px}.instruction{font-size:16px}.rate{font-size:13px}}
+@media(max-width:360px){
+    .coupon-shell{margin-left:10px;margin-right:10px}
+    .coupon-card{padding-left:14px;padding-right:14px}
+    .coupon-photo{width:120px;height:120px}
+    .detail{font-size:12px;margin-bottom:11px}
+    .detail strong{font-size:12px}
+    .meal-grid{padding-left:14px;padding-right:14px;gap:14px 10px}
+    .meal{height:54px;font-size:16px}
+    .instruction{font-size:16px;padding-top:28px}
+    .rate{font-size:13px;margin-bottom:24px}
+}
 </style>
 </head>
 <body>
