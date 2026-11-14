@@ -107,7 +107,8 @@ function showCoupon(){
  profile=getProfile();if(!profile){showForm();return}
  app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">‹</span>Mess Coupon<span class="x">×</span></div><div class="coupon-shell">
  <div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}" alt="Profile"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div>
- <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><div class="rate">⭐ RATE US</div>
+ <div class="instruction"><br><br>Tap on the meal name to scan<br>and avail food.</div><div class="rate">⭐ RATE US</div>
+ <br><br><br>
  <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div></div></div>`;
  document.querySelectorAll('.meal').forEach(b=>b.onclick=async()=>{selectedMeal=b.dataset.meal;await enterFullscreen();showScanner()});
  document.getElementById('profilePhotoAccess').ondblclick=showForm;
