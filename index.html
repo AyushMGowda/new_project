@@ -584,6 +584,7 @@ async function showScanner(){
    <div class="camera-shade"></div>
    <div class="scan-frame"></div>
    <div class="scan-line"></div>
+   <audio id="scanBeep" src="./beep_sound_trimmed.mp3" preload="auto"></audio>
    ${dotsMarkup}
  </div>`;
 
@@ -652,6 +653,14 @@ async function showScanner(){
  }catch(err){
    // Keep the scanner animation completely clean even if camera permission fails.
  }
+
+ const scanBeep=document.getElementById('scanBeep');
+ setTimeout(()=>{
+   if(scanBeep){
+     scanBeep.currentTime=0;
+     scanBeep.play().catch(()=>{});
+   }
+ },3500);
 
  setTimeout(()=>{
    running=false;

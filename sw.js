@@ -1,10 +1,11 @@
-const CACHE = "mess-pass-v12";
+const CACHE = "mess-pass-v13";
 
 const ASSETS = [
     "./",
     "./index.html",
     "./manifest.json",
-    "./sw.js"
+    "./sw.js",
+    "./beep_sound_trimmed.mp3"
 ];
 
 self.addEventListener("install", event => {
