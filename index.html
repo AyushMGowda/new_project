@@ -94,7 +94,6 @@ button,input{font:inherit}
     padding:34px 20px 14px
 }
 .rate{
-    display:block;
     text-align:center;
     margin:0 auto 28px;
     border:2px solid #7c1d2c;
@@ -104,14 +103,8 @@ button,input{font:inherit}
     padding:4px 14px;
     font-size:14px;
     font-weight:700;
-    width:max-content;
-    box-shadow:0 0 0 2px rgba(255,122,34,.10),0 0 12px rgba(255,122,34,.32);
-    transition:box-shadow .15s ease, transform .15s ease
+    width:max-content
 }
-.rate:hover,.rate:focus-visible{
-    box-shadow:0 0 0 2px rgba(255,122,34,.18),0 0 15px rgba(255,122,34,.55);
-}
-.rate:active{transform:scale(.98)}
 .meal-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -149,10 +142,11 @@ button,input{font:inherit}
 .scanner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#202020}
 .camera-shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.35),transparent 25%,transparent 72%,rgba(0,0,0,.42));pointer-events:none}
 .scan-frame{position:absolute;left:12%;right:12%;top:28%;height:44%;border:2px solid rgba(255,255,255,.75);border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.18);pointer-events:none}
-.scan-line{position:absolute;left:12%;right:12%;top:29%;height:2px;background:#d21f45;box-shadow:0 0 12px #ff3d67;animation:scan 1.35s ease-in-out infinite alternate;pointer-events:none}
-.dot{position:absolute;width:7px;height:7px;background:#ffd21a;border-radius:50%;animation:float 2s infinite alternate ease-in-out;pointer-events:none}.d1{left:25%;top:42%}.d2{left:58%;top:38%}.d3{left:72%;top:54%}.d4{left:38%;top:63%}.d5{left:64%;top:67%}
+.scan-line{position:absolute;left:12%;right:12%;top:50%;height:2px;background:#d21f45;box-shadow:0 0 12px #ff3d67;animation:lineBlink .72s steps(1,end) infinite;pointer-events:none}
+.dot{position:absolute;width:7px;height:7px;background:#ffd21a;border-radius:50%;opacity:0;pointer-events:none;transition:left .12s ease-out,top .12s ease-out,opacity .08s linear;box-shadow:0 0 7px rgba(255,210,26,.7)}
+.d1{left:25%;top:42%}.d2{left:58%;top:38%}.d3{left:72%;top:54%}.d4{left:38%;top:63%}.d5{left:64%;top:67%}
 .scanner-title{position:absolute;top:calc(16px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:18px;font-weight:800;text-shadow:0 2px 6px #000;z-index:3}.scanner-status{position:absolute;bottom:32px;left:18px;right:18px;text-align:center;font-size:13px;font-weight:700;text-shadow:0 2px 5px #000;z-index:3}.camera-denied{position:absolute;left:20px;right:20px;top:45%;text-align:center;font-weight:700;font-size:15px;z-index:4;display:none}
-@keyframes scan{from{top:29%}to{top:70%}}@keyframes float{from{transform:translateY(-10px)}to{transform:translateY(14px)}}
+@keyframes lineBlink{0%,38%{opacity:1}39%,100%{opacity:0}}
 
 @media(max-width:360px){
     .coupon-shell{margin-left:10px;margin-right:10px}
@@ -573,6 +567,19 @@ async function showScanner(){
  if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}
  app.innerHTML=`<div class="scanner"><video id="camera" autoplay muted playsinline></video><div class="camera-shade"></div><div class="scan-frame"></div><div class="scan-line"></div><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="dot d4"></span><span class="dot d5"></span><div class="scanner-title">Scanning ${esc(selectedMeal)}</div><div class="scanner-status" id="scannerStatus">Camera access requested…</div><div class="camera-denied" id="cameraDenied">Camera access was blocked. Allow camera permission and try again.</div></div>`;
  const video=document.getElementById('camera');
+ const dots=[...document.querySelectorAll('.dot')];
+ let dotTimer=null;
+ const randomizeDots=()=>{
+   dots.forEach((dot,i)=>{
+     const left=16+Math.random()*68;
+     const top=32+Math.random()*40;
+     dot.style.left=left+'%';
+     dot.style.top=top+'%';
+     dot.style.opacity=(Math.random()>.22)?'1':'0';
+   });
+ };
+ randomizeDots();
+ dotTimer=setInterval(randomizeDots,280);
  try{
    activeStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
    video.srcObject=activeStream;
@@ -581,7 +588,7 @@ async function showScanner(){
    document.getElementById('scannerStatus').textContent='Camera unavailable';
    document.getElementById('cameraDenied').style.display='block';
  }
- setTimeout(showPass,4500);
+ setTimeout(()=>{if(dotTimer)clearInterval(dotTimer);showPass()},4500);
 }
 function stopCamera(){if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}}
 function makeQR(){const data=encodeURIComponent(`${profile.id}-${profile.name} - MESS PASS VERIFICATION SYSTEM ACCREDITED`);return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${data}&ecc=H&margin=10`}
