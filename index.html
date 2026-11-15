@@ -267,6 +267,7 @@ button,input{font:inherit}
     text-align:center;
     text-decoration:underline;
     font-size:18px;
+    font-weight:400;
     margin:0 0 18px;
 }
 .feedback-options{
@@ -322,9 +323,14 @@ button,input{font:inherit}
     font-size:16px;
     cursor:pointer;
 }
+.feedback-meal{
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
 .feedback-meal.selected{
     border-color:#ff7a22;
-    box-shadow:0 0 0 2px rgba(255,122,34,.12);
+    transform:scale(1.06);
+    box-shadow:0 0 14px 3px rgba(255,122,34,.48);
+    background:#fffaf6;
 }
 .feedback-remarks{
     width:100%;
