@@ -19,13 +19,13 @@ button,input{font:inherit}
 .app{width:100%;max-width:430px;height:100dvh;min-height:100dvh;margin:0 auto;background:#fff;overflow:hidden}
 .screen,.coupon,.pass{width:100%;height:100dvh;min-height:100dvh;overflow:hidden;background:#fff}
 .hidden{display:none!important}
-.header{ height:90px; min-height:90x; background:#262626; color:#fff; display:flex; align-items:center; justify-content:center; position:relative; font-size:19px; font-weight:700; z-index:10; padding-top:calc(env(safe-area-inset-top) + 20px); box-sizing:border-box; }
+.header{height:124px;min-height:124px;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:19px;font-weight:700;z-index:10;padding-top:env(safe-area-inset-top);box-sizing:border-box;}
 .header .x{ position:absolute; right:16px; color:#aaa; font-size:31px; font-weight:300; line-height:1; cursor:pointer; transform:translateY(10px); } 
 .header .back{ position:absolute; left:16px; color:#fff; font-size:30px; font-weight:300; line-height:1; cursor:pointer; transform:translateY(10px); } 
 .header .history{ position:absolute; right:16px; color:#fff; font-size:17px; font-weight:500; line-height:1; cursor:pointer; transform:translateY(10px); }
 
 /* Profile setup */
-.form-wrap{height:calc(100dvh - 52px);overflow:auto;padding:16px;background:#fff;-webkit-overflow-scrolling:touch}
+.form-wrap{ height:calc(100dvh - 124px); overflow:auto; padding:16px; background:#fff; -webkit-overflow-scrolling:touch; box-sizing:border-box; }
 .notice{background:#eaf8ef;border:1px solid #a9dfbd;color:#126b3b;border-radius:9px;padding:11px 13px;margin-bottom:14px;font-size:13px;line-height:1.35}
 .photo-preview{width:170px;height:170px;margin:0 auto 16px;border-radius:14px;overflow:hidden;background:#eee;border:1px solid #bbb}
 .photo-preview img{width:100%;height:100%;object-fit:cover}
