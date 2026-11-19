@@ -129,6 +129,10 @@ button,input{font:inherit}
 .meal span{margin-left:7px}
 .meal:nth-child(3){grid-column:1/2}
 
+/* Meal history: intentionally blank white content area */
+.history-page{width:100%;height:100dvh;min-height:100dvh;background:#fff;overflow:hidden}
+.history-page .history-content{height:calc(100dvh - 124px);background:#fff}
+
 /* Mess pass: intentionally scrollable, matching the larger original pass layout */
 .pass{background:#e7e7e7;min-height:100dvh;height:100dvh;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:18px}
 .pass-card{background:#fff;margin:0 15px;border-radius:0 0 15px 15px;overflow:hidden;min-height:0;height:auto}
@@ -479,15 +483,8 @@ function submitFeedback(){
     const msg=document.getElementById('feedbackMessage');
     if(msg)msg.classList.add('show');
 }
-function showCoupon(){
- if(passTimer){clearInterval(passTimer);passTimer=null}
- if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}
- profile=getProfile();if(!profile){showForm();return}
- app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">←</span>Mess Coupon<span class="history">Meal History</span></div><div class="coupon-shell">
- <div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}" alt="Profile"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div>
- <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><button class="rate" id="rateUsBtn" type="button">⭐ RATE US</button>
- <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div>
- <div class="feedback-backdrop" id="feedbackModal">
+function feedbackMarkup(){
+    return ` <div class="feedback-backdrop" id="feedbackModal">
    <div class="feedback-modal">
      <div class="feedback-header"><div class="feedback-grabber"></div>Feedback<button class="feedback-close" id="feedbackClose" type="button">×</button></div>
      <div class="feedback-scroll" id="feedbackScroll">
@@ -558,21 +555,47 @@ function showCoupon(){
      <button id="feedbackOk" type="button">OK</button>
    </div>
  </div>
- </div></div>`;
+`;
+}
+
+function bindFeedback(rateButtonId){
+    const rateButton=document.getElementById(rateButtonId);
+    if(rateButton)rateButton.onclick=openFeedback;
+    const close=document.getElementById('feedbackClose');
+    if(close)close.onclick=closeFeedback;
+    document.querySelectorAll('.feedback-star').forEach(star=>star.onclick=()=>selectFeedbackRating(Number(star.dataset.rating)));
+    document.querySelectorAll('.feedback-meal').forEach(btn=>btn.onclick=()=>{
+        document.querySelectorAll('.feedback-meal').forEach(x=>x.classList.remove('selected'));
+        btn.classList.add('selected');
+    });
+    const submit=document.getElementById('feedbackSubmit');
+    if(submit)submit.onclick=submitFeedback;
+    const ok=document.getElementById('feedbackOk');
+    if(ok)ok.onclick=()=>{
+        document.getElementById('feedbackMessage').classList.remove('show');
+        closeFeedback();
+    };
+}
+
+function showHistory(){
+    if(passTimer){clearInterval(passTimer);passTimer=null}
+    if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}
+    stopCamera();
+    app.innerHTML=`<div class="history-page"><div class="header"><span class="back" onclick="showCoupon()">←</span>Meal History</div><div class="history-content"></div></div>`;
+}
+
+function showCoupon(){
+ if(passTimer){clearInterval(passTimer);passTimer=null}
+ if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}
+ profile=getProfile();if(!profile){showForm();return}
+ app.innerHTML=`<div class="coupon"><div class="header"><span class="back" onclick="showCoupon()">←</span>Mess Coupon<span class="history" onclick="showHistory()">Meal History</span></div><div class="coupon-shell">
+ <div class="coupon-card" id="profilePhotoAccess"><div class="coupon-photo"><img src="${profile.photo}" alt="Profile"></div><div class="nameid">${esc(profile.name)} ${esc(profile.id)}</div><div class="detail"><strong>Father's Name</strong>${esc(profile.father)}</div><div class="detail"><strong>Mother's Name</strong>${esc(profile.mother)}</div><div class="detail"><strong>Program Name</strong>${esc(profile.program)}</div><div class="detail"><strong>Hostel</strong>${esc(profile.hostel)}</div></div>
+ <div class="instruction">Tap on the meal name to scan<br>and avail food.</div><button class="rate" id="rateUsBtn" type="button">⭐ RATE US</button>
+ <div class="meal-grid"><button class="meal" data-meal="Breakfast">Breakfast <span>→</span></button><button class="meal" data-meal="Lunch">Lunch <span>→</span></button><button class="meal" data-meal="Dinner">Dinner <span>→</span></button></div>
+ ${feedbackMarkup()} </div></div>`;
  document.querySelectorAll('.meal').forEach(b=>b.onclick=async()=>{selectedMeal=b.dataset.meal;await enterFullscreen();showScanner()});
  document.getElementById('profilePhotoAccess').ondblclick=showForm;
- document.getElementById('rateUsBtn').onclick=openFeedback;
- document.getElementById('feedbackClose').onclick=closeFeedback;
- document.querySelectorAll('.feedback-star').forEach(star=>star.onclick=()=>selectFeedbackRating(Number(star.dataset.rating)));
- document.querySelectorAll('.feedback-meal').forEach(btn=>btn.onclick=()=>{
-     document.querySelectorAll('.feedback-meal').forEach(x=>x.classList.remove('selected'));
-     btn.classList.add('selected');
- });
- document.getElementById('feedbackSubmit').onclick=submitFeedback;
- document.getElementById('feedbackOk').onclick=()=>{
-     document.getElementById('feedbackMessage').classList.remove('show');
-     closeFeedback();
- };
+ bindFeedback('rateUsBtn');
 }
 async function showScanner(){
  if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}
@@ -673,7 +696,8 @@ async function showScanner(){
 
 function stopCamera(){if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}}
 function makeQR(){const data=encodeURIComponent(`${profile.id}-${profile.name} - MESS PASS VERIFICATION SYSTEM ACCREDITED`);return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${data}&ecc=H&margin=10`}
-function showPass(){stopCamera();if(passTimer){clearInterval(passTimer);passTimer=null}if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}profile=getProfile();const now=new Date();const date=now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});const time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});const verificationCode=String(Math.floor(10000000+Math.random()*90000000));app.innerHTML=`<div class="pass"><div class="header"><span class="back" onclick="showCoupon()">←</span>Mess Pass<span class="x">×</span></div><div class="pass-card"><div class="pass-top"><div class="badge" id="passCountdown">30</div><div class="pass-grid"><div><div class="frame"><img src="${profile.photo}"></div><div class="pass-text">${esc(profile.id)}</div><div class="pass-sub">${esc(profile.name)}</div></div><div><div class="frame qr-frame"><img src="${makeQR()}" alt="QR"></div><div class="pass-text">${selectedMeal}</div><div class="pass-sub">${esc(profile.mess)}</div></div></div></div><div class="info"><div style="margin-bottom:5px">${esc(profile.program)}</div><div style="font-weight:700">Your Assigned Mess - ${esc(profile.mess)}</div></div><div class="date-row"><span>${date}</span><span>${time}</span></div><div class="approved">Meal Approved</div><div class="rate-pass"><div class="rate">⭐ RATE US</div></div><div class="video-strip" style="--accent:${profile.accent}"><div class="video-box"><video src="${EMBEDDED_ACCEPTED_VIDEO}" autoplay loop muted playsinline></video></div></div><div class="footer"><div><div class="gray">Father's Name</div><div class="value">${esc(profile.father)}</div></div><div><div class="gray">Mother's Name</div><div class="value">${esc(profile.mother)}</div></div><div><div class="gray">Program</div><div class="value">${esc(profile.program)}</div></div><div><div class="gray">Hostel</div><div class="value">${esc(profile.hostel)}</div></div><div class="verification-code"><span class="label">Verification Code</span><span class="number">${verificationCode}</span></div></div></div></div>`;
+function showPass(){stopCamera();if(passTimer){clearInterval(passTimer);passTimer=null}if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}profile=getProfile();const now=new Date();const date=now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});const time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});const verificationCode=String(Math.floor(10000000+Math.random()*90000000));app.innerHTML=`<div class="pass"><div class="header"><span class="back" onclick="showCoupon()">←</span>Mess Pass<span class="x">×</span></div><div class="pass-card"><div class="pass-top"><div class="badge" id="passCountdown">30</div><div class="pass-grid"><div><div class="frame"><img src="${profile.photo}"></div><div class="pass-text">${esc(profile.id)}</div><div class="pass-sub">${esc(profile.name)}</div></div><div><div class="frame qr-frame"><img src="${makeQR()}" alt="QR"></div><div class="pass-text">${selectedMeal}</div><div class="pass-sub">${esc(profile.mess)}</div></div></div></div><div class="info"><div style="margin-bottom:5px">${esc(profile.program)}</div><div style="font-weight:700">Your Assigned Mess - ${esc(profile.mess)}</div></div><div class="date-row"><span>${date}</span><span>${time}</span></div><div class="approved">Meal Approved</div><div class="rate-pass"><button class="rate" id="ratePassBtn" type="button">⭐ RATE US</button></div>${feedbackMarkup()}<div class="video-strip" style="--accent:${profile.accent}"><div class="video-box"><video src="${EMBEDDED_ACCEPTED_VIDEO}" autoplay loop muted playsinline></video></div></div><div class="footer"><div><div class="gray">Father's Name</div><div class="value">${esc(profile.father)}</div></div><div><div class="gray">Mother's Name</div><div class="value">${esc(profile.mother)}</div></div><div><div class="gray">Program</div><div class="value">${esc(profile.program)}</div></div><div><div class="gray">Hostel</div><div class="value">${esc(profile.hostel)}</div></div><div class="verification-code"><span class="label">Verification Code</span><span class="number">${verificationCode}</span></div></div></div></div>`;
+ bindFeedback('ratePassBtn');
  let remaining=30;
  passTimer=setInterval(()=>{remaining--;const badge=document.getElementById('passCountdown');if(!badge){clearInterval(passTimer);passTimer=null;return}badge.textContent=remaining;if(remaining<=0){clearInterval(passTimer);passTimer=null;passReturnTimer=setTimeout(showCoupon,500)}},1000)}
 profile=getProfile();if(profile)showCoupon();else showForm();
