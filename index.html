@@ -19,7 +19,7 @@ button,input{font:inherit}
 .app{width:100%;max-width:430px;height:100dvh;min-height:100dvh;margin:0 auto;background:#fff;overflow:hidden}
 .screen,.coupon,.pass{width:100%;height:100dvh;min-height:100dvh;overflow:hidden;background:#fff}
 .hidden{display:none!important}
-.header{height:52px;min-height:52px;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:19px;font-weight:700;z-index:10}
+.header{height:52px;min-height:52px;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;font-size:19px;font-weight:700;z-index:10;padding-top:env(safe-area-inset-top)}
 .header .x{position:absolute;right:16px;color:#aaa;font-size:31px;font-weight:300;line-height:1;cursor:pointer}
 .header .back{position:absolute;left:16px;color:#fff;font-size:30px;font-weight:300;line-height:1;cursor:pointer}
 .header .history{position:absolute;right:16px;color:#fff;font-size:17px;font-weight:500;line-height:1;cursor:pointer}
@@ -30,7 +30,7 @@ button,input{font:inherit}
 .notice{background:#eaf8ef;border:1px solid #a9dfbd;color:#126b3b;border-radius:9px;padding:11px 13px;margin-bottom:14px;font-size:13px;line-height:1.35}
 .photo-preview{width:170px;height:170px;margin:0 auto 16px;border-radius:14px;overflow:hidden;background:#eee;border:1px solid #bbb}
 .photo-preview img{width:100%;height:100%;object-fit:cover}
-.field{margin:0 0 15px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.field{margin:0 0 13px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
 .field input,.field select{width:100%;height:50px;border:1px solid #aaa;border-radius:7px;background:#fff;color:#000!important;font-size:16px;padding:0 13px;outline:none}
 .accent-controls{display:flex;align-items:center;gap:10px}.accent-controls input[type="color"]{width:58px;height:50px;padding:4px;border:1px solid #aaa;border-radius:7px;background:#fff;cursor:pointer}.accent-controls #accentHex{flex:1;box-sizing:border-box;font-family:monospace;font-weight:600;text-transform:uppercase}
 .field input::file-selector-button{background:#666;color:#fff;border:0;padding:9px 11px;margin-right:9px;border-radius:4px}
@@ -38,30 +38,28 @@ button,input{font:inherit}
 
 /* Coupon: one-screen layout, stretched like the reference */
 .coupon{
-    background:#fff;
-    height:calc(100dvh - 124px);
+    background:#e7e7e7;
+    height:calc(100dvh - 52px);
     min-height:0;
-    overflow:auto;
+    overflow:hidden;
     padding:0;
 }
-.coupon .header{height:100px;min-height:90px;}
 .coupon-shell{
     background:#fff;
-    height:auto;
-    min-height:0;
+    height:100%;
     margin:0 16px;
     border:1px solid #d7d7d7;
     border-top:0;
     box-shadow:0 2px 5px rgba(0,0,0,.22);
-    overflow:visible;
-    padding:8px 0 10px;
+    overflow:hidden;
+    padding:8px 0 20px;
 }
 .coupon-card{
     flex:0 0 auto;
     margin:0;
     background:linear-gradient(105deg,#ff8075,#ffd477);
     border-radius:9px;
-    padding:14px 20px 31px;
+    padding:14px 20px 24px;
     box-shadow:0 4px 9px #999;
 }
 .coupon-photo{
@@ -77,12 +75,12 @@ button,input{font:inherit}
     text-align:center;
     font-size:17px;
     line-height:1.2;
-    margin-bottom:29px
+    margin-bottom:17px
 }
 .detail{
     font-size:13px;
     line-height:1.25;
-    margin:0 0 15px
+    margin:0 0 13px
 }
 .detail strong{
     display:block;
@@ -95,12 +93,12 @@ button,input{font:inherit}
     text-align:center;
     font-size:clamp(17px,5vw,23px);
     line-height:1.2;
-    padding:40px 20px 14px
+    padding:34px 20px 14px
 }
 .rate{
     display:block;
     text-align:center;
-    margin:0 auto 32px;
+    margin:0 auto 28px;
     border:2px solid #7c1d2c;
     color:#111;
     background:#fff;
@@ -183,8 +181,8 @@ button,input{font:inherit}
     overflow:hidden;
 }
 .feedback-header{
-    height:124px;
-    min-height:124px;
+    height:52px;
+    min-height:52px;
     background:#303030;
     color:#fff;
     display:flex;
@@ -241,7 +239,7 @@ button,input{font:inherit}
     display:flex;
     justify-content:center;
     gap:16px;
-    margin:0 auto 32px;
+    margin:0 auto 28px;
 }
 .feedback-star{
     border:0;
@@ -422,13 +420,7 @@ async function enterFullscreen(){
   try{if(!document.fullscreenElement && document.documentElement.requestFullscreen){await document.documentElement.requestFullscreen({navigationUI:'hide'})}}catch(e){}
   try{if(screen.orientation?.lock) await screen.orientation.lock('portrait')}catch(e){}
 }
-async function exitFullscreen(){
-  try{
-    if(document.fullscreenElement && document.exitFullscreen){
-      await document.exitFullscreen();
-    }
-  }catch(e){}
-}
+function exitFullscreen(){try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}}
 function showForm(){
  app.innerHTML=`<div class="screen"><div class="header">Fill Profile</div><div class="form-wrap">
  <div class="notice">✓ Fill this once. Your profile is saved on this device and reused next time.</div>
@@ -488,8 +480,7 @@ function submitFeedback(){
     const msg=document.getElementById('feedbackMessage');
     if(msg)msg.classList.add('show');
 }
-async function showCoupon(){
-  await exitFullscreen();
+function showCoupon(){
  if(passTimer){clearInterval(passTimer);passTimer=null}
  if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}
  profile=getProfile();if(!profile){showForm();return}
@@ -685,7 +676,7 @@ function stopCamera(){if(activeStream){activeStream.getTracks().forEach(t=>t.sto
 function makeQR(){const data=encodeURIComponent(`${profile.id}-${profile.name} - MESS PASS VERIFICATION SYSTEM ACCREDITED`);return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${data}&ecc=H&margin=10`}
 function showPass(){stopCamera();if(passTimer){clearInterval(passTimer);passTimer=null}if(passReturnTimer){clearTimeout(passReturnTimer);passReturnTimer=null}profile=getProfile();const now=new Date();const date=now.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'});const time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});const verificationCode=String(Math.floor(10000000+Math.random()*90000000));app.innerHTML=`<div class="pass"><div class="header"><span class="back" onclick="showCoupon()">←</span>Mess Pass<span class="x">×</span></div><div class="pass-card"><div class="pass-top"><div class="badge" id="passCountdown">30</div><div class="pass-grid"><div><div class="frame"><img src="${profile.photo}"></div><div class="pass-text">${esc(profile.id)}</div><div class="pass-sub">${esc(profile.name)}</div></div><div><div class="frame qr-frame"><img src="${makeQR()}" alt="QR"></div><div class="pass-text">${selectedMeal}</div><div class="pass-sub">${esc(profile.mess)}</div></div></div></div><div class="info"><div style="margin-bottom:5px">${esc(profile.program)}</div><div style="font-weight:700">Your Assigned Mess - ${esc(profile.mess)}</div></div><div class="date-row"><span>${date}</span><span>${time}</span></div><div class="approved">Meal Approved</div><div class="rate-pass"><div class="rate">⭐ RATE US</div></div><div class="video-strip" style="--accent:${profile.accent}"><div class="video-box"><video src="${EMBEDDED_ACCEPTED_VIDEO}" autoplay loop muted playsinline></video></div></div><div class="footer"><div><div class="gray">Father's Name</div><div class="value">${esc(profile.father)}</div></div><div><div class="gray">Mother's Name</div><div class="value">${esc(profile.mother)}</div></div><div><div class="gray">Program</div><div class="value">${esc(profile.program)}</div></div><div><div class="gray">Hostel</div><div class="value">${esc(profile.hostel)}</div></div><div class="verification-code"><span class="label">Verification Code</span><span class="number">${verificationCode}</span></div></div></div></div>`;
  let remaining=30;
- passTimer=setInterval(()=>{remaining--;const badge=document.getElementById('passCountdown');if(!badge){clearInterval(passTimer);passTimer=null;return}badge.textContent=remaining;if(remaining<=0){clearInterval(passTimer);passTimer=null;passReturnTimer=setTimeout(()=>showCoupon(),500)}},1000)}
+ passTimer=setInterval(()=>{remaining--;const badge=document.getElementById('passCountdown');if(!badge){clearInterval(passTimer);passTimer=null;return}badge.textContent=remaining;if(remaining<=0){clearInterval(passTimer);passTimer=null;passReturnTimer=setTimeout(showCoupon,500)}},1000)}
 profile=getProfile();if(profile)showCoupon();else showForm();
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 window.addEventListener('pagehide',stopCamera);
